@@ -111,6 +111,7 @@
         <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
         <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
         <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
+        <button id="btn5" onclick="finishProcess()">Finalizar Proceso</button>
       </div>
       <div class="machine" id="machine"></div>
       <p id="status">Estado: Esperando acción...</p>
@@ -156,6 +157,16 @@
         default:
           status.textContent = "Estado: Esperando acción...";
       }
+    }
+
+    function finishProcess() {
+      const status = document.getElementById("status");
+      const machine = document.getElementById("machine");
+      // Quita la clase 'active' de todos los botones
+      document.querySelectorAll(".button-container button").forEach(btn => btn.classList.remove("active"));
+      
+      status.textContent = "Estado: Proceso finalizado.";
+      machine.style.background = "url('https://via.placeholder.com/600x200/000000/FFFFFF?text=Finalizado') no-repeat center";
     }
 
     function updateSensors() {
