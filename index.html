@@ -49,6 +49,14 @@
             margin-bottom: 20px;
             border-radius: 10px;
         }
+        .sensor-data {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: left;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -60,6 +68,14 @@
         <button onclick="startStep(3)">3) Activar dispensador de silicona</button>
         <button onclick="startStep(4)">4) Bajar parte superior</button>
         <p id="status">Estado: Esperando acción...</p>
+        <div class="sensor-data">
+            <h3>Datos de Sensores</h3>
+            <p>Ultrasónico: <span id="sensor-ultrasonico">0 cm</span></p>
+            <p>Color: <span id="sensor-color">Desconocido</span></p>
+            <p>Calor: <span id="sensor-calor">0°C</span></p>
+            <p>Presión: <span id="sensor-presion">0 kPa</span></p>
+            <p>Humedad: <span id="sensor-humedad">0%</span></p>
+        </div>
     </div>
 
     <script>
@@ -82,6 +98,16 @@
                     status.textContent = "Estado: Esperando acción...";
             }
         }
+
+        function updateSensors() {
+            document.getElementById("sensor-ultrasonico").textContent = (Math.random() * 100).toFixed(2) + " cm";
+            document.getElementById("sensor-color").textContent = ["Rojo", "Verde", "Azul"][Math.floor(Math.random() * 3)];
+            document.getElementById("sensor-calor").textContent = (Math.random() * 50).toFixed(2) + "°C";
+            document.getElementById("sensor-presion").textContent = (Math.random() * 100).toFixed(2) + " kPa";
+            document.getElementById("sensor-humedad").textContent = (Math.random() * 100).toFixed(2) + "%";
+        }
+
+        setInterval(updateSensors, 2000);
     </script>
 </body>
 </html>
