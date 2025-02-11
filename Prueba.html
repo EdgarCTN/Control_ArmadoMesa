@@ -3,70 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Ensamblaje</title>
+    <title>Control de Ensamblaje de Mesa</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            margin: 20px;
         }
         .container {
             max-width: 600px;
-            margin: 50px auto;
+            margin: auto;
             padding: 20px;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
             border-radius: 10px;
-        }
-        h1 {
-            color: #333;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         }
         button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .sensor-container {
-            text-align: left;
-            margin-top: 20px;
-        }
-        .sensor {
-            background: #e9ecef;
+            display: block;
+            width: 100%;
             padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Control de Ensamblaje</h1>
-        <div class="controls">
-            <button>Iniciar</button>
-            <button>Detener</button>
-        </div>
-        
-        <h2>Datos de Sensores</h2>
-        <div class="sensor-container">
-            <div class="sensor">Ultrasónico: --</div>
-            <div class="sensor">Color: --</div>
-            <div class="sensor">Temperatura: --</div>
-            <div class="sensor">Presión: --</div>
-            <div class="sensor">Humedad: --</div>
-        </div>
+        <h2>Control de Ensamblaje de Mesa</h2>
+        <button onclick="startStep(1)">1) Elevar parte superior</button>
+        <button onclick="startStep(2)">2) Transportar parte inferior</button>
+        <button onclick="startStep(3)">3) Activar dispensador de silicona</button>
+        <button onclick="startStep(4)">4) Bajar parte superior</button>
+        <p id="status">Estado: Esperando acción...</p>
     </div>
+
+    <script>
+        function startStep(step) {
+            const status = document.getElementById("status");
+            switch(step) {
+                case 1:
+                    status.textContent = "Estado: Elevando parte superior...";
+                    break;
+                case 2:
+                    status.textContent = "Estado: Transportando parte inferior...";
+                    break;
+                case 3:
+                    status.textContent = "Estado: Activando dispensador de silicona...";
+                    break;
+                case 4:
+                    status.textContent = "Estado: Bajando parte superior...";
+                    break;
+                default:
+                    status.textContent = "Estado: Esperando acción...";
+            }
+        }
+    </script>
 </body>
 </html>
