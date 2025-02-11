@@ -25,15 +25,10 @@
     .control-card {
       text-align: center;
     }
-    .machine {
-      width: 100%;
-      height: 200px;
-      background: url('https://via.placeholder.com/600x200') no-repeat center;
-      background-size: cover;
-      border-radius: 10px;
+    .button-container {
       margin-bottom: 10px;
     }
-    button {
+    .button-container button {
       width: 100%;
       padding: 15px;
       margin: 5px 0;
@@ -45,13 +40,25 @@
       cursor: pointer;
       transition: background 0.3s;
     }
-    button:hover {
+    .button-container button:hover {
       background-color: #45a049;
     }
+    .active {
+      background-color: #ff9800 !important;
+    }
+    .machine {
+      width: 100%;
+      height: 200px;
+      background: url('https://via.placeholder.com/600x200') no-repeat center;
+      background-size: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
     #status {
-      margin-top: 10px;
+      margin-top: 5px;
       font-size: 18px;
       font-weight: bold;
+      color: #333;
     }
     .sensor-data {
       margin-top: 10px;
@@ -60,9 +67,6 @@
       padding: 10px;
       background: #e0e0e0;
       border-radius: 5px;
-    }
-    .active {
-      background-color: #ff9800 !important;
     }
   </style>
 </head>
@@ -74,11 +78,13 @@
   
   <!-- Tarjeta de controles y sensores -->
   <div class="card control-card">
+    <div class="button-container">
+      <button id="btn1" onclick="startStep(1)">1) Elevar parte superior</button>
+      <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
+      <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
+      <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
+    </div>
     <div class="machine" id="machine"></div>
-    <button id="btn1" onclick="startStep(1)">1) Elevar parte superior</button>
-    <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
-    <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
-    <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
     <p id="status">Estado: Esperando acción...</p>
     <div class="sensor-data">
       <h3>Datos de Sensores</h3>
@@ -94,8 +100,8 @@
     function startStep(step) {
       const status = document.getElementById("status");
       const machine = document.getElementById("machine");
-      // Elimina la clase 'active' de todos los botones
-      document.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+      // Quita la clase 'active' de todos los botones
+      document.querySelectorAll(".button-container button").forEach(btn => btn.classList.remove("active"));
       
       switch(step) {
         case 1:
