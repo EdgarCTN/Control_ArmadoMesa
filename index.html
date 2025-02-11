@@ -4,47 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Control de Ensamblaje de Mesa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #333;
+    }
+    .container {
+      width: 90%;
+      max-width: 800px;
       margin: 20px;
     }
     .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       padding: 20px;
+      margin-bottom: 20px;
     }
-    .card h2 {
-      margin: 0;
+    .card-title {
       text-align: center;
-      color: #333;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #5563DE;
+      margin: 0;
+      padding: 10px 0;
+      border-bottom: 2px solid #f0f0f0;
     }
     .control-card {
       text-align: center;
+      padding: 20px;
     }
     .button-container {
-      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
     }
     .button-container button {
-      width: 100%;
+      flex: 1 1 calc(50% - 10px);
       padding: 15px;
-      margin: 5px 0;
-      font-size: 18px;
+      font-size: 1rem;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       background-color: #4CAF50;
-      color: white;
+      color: #fff;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
     .button-container button:hover {
       background-color: #45a049;
+      transform: translateY(-3px);
     }
     .active {
-      background-color: #ff9800 !important;
+      background-color: #FF9800 !important;
     }
     .machine {
       width: 100%;
@@ -52,47 +75,53 @@
       background: url('https://via.placeholder.com/600x200') no-repeat center;
       background-size: cover;
       border-radius: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      transition: background 0.3s ease;
     }
     #status {
-      margin-top: 5px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 15px;
     }
     .sensor-data {
-      margin-top: 10px;
-      font-size: 16px;
       text-align: left;
-      padding: 10px;
-      background: #e0e0e0;
-      border-radius: 5px;
+      background: #f7f7f7;
+      border-left: 5px solid #5563DE;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .sensor-data h3 {
+      margin-top: 0;
+      color: #5563DE;
     }
   </style>
 </head>
 <body>
-  <!-- Tarjeta del título -->
-  <div class="card">
-    <h2>Control de Ensamblaje de Mesa</h2>
-  </div>
-  
-  <!-- Tarjeta de controles y sensores -->
-  <div class="card control-card">
-    <div class="button-container">
-      <button id="btn1" onclick="startStep(1)">1) Elevar parte superior</button>
-      <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
-      <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
-      <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
+  <div class="container">
+    <!-- Tarjeta del título -->
+    <div class="card">
+      <h2 class="card-title">Control de Ensamblaje de Mesa</h2>
     </div>
-    <div class="machine" id="machine"></div>
-    <p id="status">Estado: Esperando acción...</p>
-    <div class="sensor-data">
-      <h3>Datos de Sensores</h3>
-      <p>Ultrasónico: <span id="sensor-ultrasonico">0 cm</span></p>
-      <p>Color: <span id="sensor-color">Desconocido</span></p>
-      <p>Calor: <span id="sensor-calor">0°C</span></p>
-      <p>Presión: <span id="sensor-presion">0 kPa</span></p>
-      <p>Humedad: <span id="sensor-humedad">0%</span></p>
+    
+    <!-- Tarjeta de controles y sensores -->
+    <div class="card control-card">
+      <div class="button-container">
+        <button id="btn1" onclick="startStep(1)">1) Elevar parte superior</button>
+        <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
+        <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
+        <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
+      </div>
+      <div class="machine" id="machine"></div>
+      <p id="status">Estado: Esperando acción...</p>
+      <div class="sensor-data">
+        <h3>Datos de Sensores</h3>
+        <p><strong>Ultrasónico:</strong> <span id="sensor-ultrasonico">0 cm</span></p>
+        <p><strong>Color:</strong> <span id="sensor-color">Desconocido</span></p>
+        <p><strong>Calor:</strong> <span id="sensor-calor">0°C</span></p>
+        <p><strong>Presión:</strong> <span id="sensor-presion">0 kPa</span></p>
+        <p><strong>Humedad:</strong> <span id="sensor-humedad">0%</span></p>
+      </div>
     </div>
   </div>
 
