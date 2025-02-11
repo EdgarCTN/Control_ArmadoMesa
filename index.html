@@ -6,9 +6,7 @@
   <title>Control de Ensamblaje de Mesa</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
@@ -45,15 +43,10 @@
       padding: 20px;
     }
     .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
       margin-bottom: 20px;
     }
     .button-container button {
-      flex: 1 1 calc(50% - 10px);
-      padding: 15px;
+      padding: 15px 30px;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
@@ -66,13 +59,10 @@
       background-color: #45a049;
       transform: translateY(-3px);
     }
-    .active {
-      background-color: #FF9800 !important;
-    }
     .machine {
       width: 100%;
       height: 200px;
-      background: url('https://via.placeholder.com/600x200') no-repeat center;
+      background: url('https://via.placeholder.com/600x200/cccccc/000000?text=Esperando+Proceso') no-repeat center;
       background-size: cover;
       border-radius: 10px;
       margin-bottom: 15px;
@@ -83,18 +73,6 @@
       font-weight: 500;
       margin-bottom: 15px;
     }
-    .sensor-data {
-      text-align: left;
-      background: #f7f7f7;
-      border-left: 5px solid #5563DE;
-      padding: 15px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-    }
-    .sensor-data h3 {
-      margin-top: 0;
-      color: #5563DE;
-    }
   </style>
 </head>
 <body>
@@ -104,80 +82,63 @@
       <h2 class="card-title">Control de Ensamblaje de Mesa</h2>
     </div>
     
-    <!-- Tarjeta de controles y sensores -->
+    <!-- Tarjeta de controles -->
     <div class="card control-card">
       <div class="button-container">
-        <button id="btn1" onclick="startStep(1)">1) Elevar parte superior</button>
-        <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
-        <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
-        <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
-        <button id="btn5" onclick="finishProcess()">Finalizar Proceso</button>
+        <button id="startButton" onclick="startProcess()">Iniciar Proceso</button>
       </div>
       <div class="machine" id="machine"></div>
       <p id="status">Estado: Esperando acción...</p>
-      <div class="sensor-data">
-        <h3>Datos de Sensores</h3>
-        <p><strong>Ultrasónico:</strong> <span id="sensor-ultrasonico">0 cm</span></p>
-        <p><strong>Color:</strong> <span id="sensor-color">Desconocido</span></p>
-        <p><strong>Calor:</strong> <span id="sensor-calor">0°C</span></p>
-        <p><strong>Presión:</strong> <span id="sensor-presion">0 kPa</span></p>
-        <p><strong>Humedad:</strong> <span id="sensor-humedad">0%</span></p>
-      </div>
     </div>
   </div>
 
   <script>
-    function startStep(step) {
-      const status = document.getElementById("status");
-      const machine = document.getElementById("machine");
-      // Quita la clase 'active' de todos los botones
-      document.querySelectorAll(".button-container button").forEach(btn => btn.classList.remove("active"));
-      
-      switch(step) {
-        case 1:
-          status.textContent = "Estado: Elevando parte superior...";
-          document.getElementById("btn1").classList.add("active");
-          machine.style.background = "url('https://via.placeholder.com/600x200/ffcc00/000000?text=Elevando') no-repeat center";
-          break;
-        case 2:
-          status.textContent = "Estado: Transportando parte inferior...";
-          document.getElementById("btn2").classList.add("active");
-          machine.style.background = "url('https://via.placeholder.com/600x200/66ccff/000000?text=Transportando') no-repeat center";
-          break;
-        case 3:
-          status.textContent = "Estado: Activando dispensador de silicona...";
-          document.getElementById("btn3").classList.add("active");
-          machine.style.background = "url('https://via.placeholder.com/600x200/ff6666/000000?text=Dispensando') no-repeat center";
-          break;
-        case 4:
-          status.textContent = "Estado: Bajando parte superior...";
-          document.getElementById("btn4").classList.add("active");
-          machine.style.background = "url('https://via.placeholder.com/600x200/66ff66/000000?text=Bajando') no-repeat center";
-          break;
-        default:
-          status.textContent = "Estado: Esperando acción...";
+    // Definición de los pasos del proceso
+    const processSteps = [
+      { 
+        text: "Verificando humedad...", 
+        image: "https://via.placeholder.com/600x200/9C27B0/FFFFFF?text=Verificando+Humedad" 
+      },
+      { 
+        text: "Moviendo cinta transportadora...", 
+        image: "https://via.placeholder.com/600x200/2196F3/FFFFFF?text=Moviendo+Cinta+Transportadora" 
+      },
+      { 
+        text: "Echando pegamento...", 
+        image: "https://via.placeholder.com/600x200/F44336/FFFFFF?text=Echando+Pegamento" 
+      },
+      { 
+        text: "Posicionando brazo robótico para colocar las patas...", 
+        image: "https://via.placeholder.com/600x200/4CAF50/FFFFFF?text=Posicionando+Brazo+Rob%C3%B3tico" 
+      },
+      { 
+        text: "Finalizando ensamblado de mesa...", 
+        image: "https://via.placeholder.com/600x200/FF9800/FFFFFF?text=Finalizando+Ensamblado" 
+      }
+    ];
+
+    // Función recursiva para ejecutar cada paso con un retardo
+    function runProcess(steps, index) {
+      if (index < steps.length) {
+        const currentStep = steps[index];
+        document.getElementById("status").textContent = "Estado: " + currentStep.text;
+        document.getElementById("machine").style.background = "url('" + currentStep.image + "') no-repeat center";
+        document.getElementById("machine").style.backgroundSize = "cover";
+        // Espera 3 segundos antes de pasar al siguiente paso
+        setTimeout(() => {
+          runProcess(steps, index + 1);
+        }, 3000);
+      } else {
+        document.getElementById("status").textContent = "Estado: Proceso completado.";
+        document.getElementById("startButton").disabled = false;
       }
     }
 
-    function finishProcess() {
-      const status = document.getElementById("status");
-      const machine = document.getElementById("machine");
-      // Quita la clase 'active' de todos los botones
-      document.querySelectorAll(".button-container button").forEach(btn => btn.classList.remove("active"));
-      
-      status.textContent = "Estado: Proceso finalizado.";
-      machine.style.background = "url('https://via.placeholder.com/600x200/000000/FFFFFF?text=Finalizado') no-repeat center";
+    // Función que inicia el proceso
+    function startProcess() {
+      document.getElementById("startButton").disabled = true;
+      runProcess(processSteps, 0);
     }
-
-    function updateSensors() {
-      document.getElementById("sensor-ultrasonico").textContent = (Math.random() * 100).toFixed(2) + " cm";
-      document.getElementById("sensor-color").textContent = ["Rojo", "Verde", "Azul"][Math.floor(Math.random() * 3)];
-      document.getElementById("sensor-calor").textContent = (Math.random() * 50).toFixed(2) + "°C";
-      document.getElementById("sensor-presion").textContent = (Math.random() * 100).toFixed(2) + " kPa";
-      document.getElementById("sensor-humedad").textContent = (Math.random() * 100).toFixed(2) + "%";
-    }
-
-    setInterval(updateSensors, 2000);
   </script>
 </body>
 </html>
