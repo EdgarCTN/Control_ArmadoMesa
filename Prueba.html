@@ -8,61 +8,65 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f4f4f4;
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
-        .sensor {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        h1 {
+            color: #333;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
         }
         button {
-            padding: 10px;
-            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .sensor-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .sensor {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Control de Ensamblaje</h1>
-        <button onclick="iniciarProceso()">Iniciar</button>
-        <button onclick="detenerProceso()">Detener</button>
+        <div class="controls">
+            <button>Iniciar</button>
+            <button>Detener</button>
+        </div>
         
         <h2>Datos de Sensores</h2>
-        <div id="sensores">
-            <div class="sensor">Ultrasónico: <span id="ultrasonico">--</span></div>
-            <div class="sensor">Color: <span id="color">--</span></div>
-            <div class="sensor">Temperatura: <span id="temperatura">--</span></div>
-            <div class="sensor">Presión: <span id="presion">--</span></div>
-            <div class="sensor">Humedad: <span id="humedad">--</span></div>
+        <div class="sensor-container">
+            <div class="sensor">Ultrasónico: --</div>
+            <div class="sensor">Color: --</div>
+            <div class="sensor">Temperatura: --</div>
+            <div class="sensor">Presión: --</div>
+            <div class="sensor">Humedad: --</div>
         </div>
     </div>
-
-    <script>
-        function iniciarProceso() {
-            alert("Proceso de ensamblaje iniciado");
-            // Aquí iría el código para enviar comandos al sistema
-        }
-
-        function detenerProceso() {
-            alert("Proceso detenido");
-            // Aquí iría el código para detener el ensamblaje
-        }
-
-        function actualizarSensores() {
-            // Simulación de datos, reemplazar con datos reales desde el backend
-            document.getElementById("ultrasonico").innerText = Math.random().toFixed(2) + " cm";
-            document.getElementById("color").innerText = ["Rojo", "Verde", "Azul"][Math.floor(Math.random() * 3)];
-            document.getElementById("temperatura").innerText = (20 + Math.random() * 10).toFixed(2) + " °C";
-            document.getElementById("presion").innerText = (1000 + Math.random() * 50).toFixed(2) + " hPa";
-            document.getElementById("humedad").innerText = (30 + Math.random() * 20).toFixed(2) + " %";
-        }
-
-        setInterval(actualizarSensores, 2000); // Actualiza cada 2 segundos
-    </script>
 </body>
 </html>
