@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Ensamblaje</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .sensor {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Control de Ensamblaje</h1>
+        <button onclick="iniciarProceso()">Iniciar</button>
+        <button onclick="detenerProceso()">Detener</button>
+        
+        <h2>Datos de Sensores</h2>
+        <div id="sensores">
+            <div class="sensor">Ultrasónico: <span id="ultrasonico">--</span></div>
+            <div class="sensor">Color: <span id="color">--</span></div>
+            <div class="sensor">Temperatura: <span id="temperatura">--</span></div>
+            <div class="sensor">Presión: <span id="presion">--</span></div>
+            <div class="sensor">Humedad: <span id="humedad">--</span></div>
+        </div>
+    </div>
+
+    <script>
+        function iniciarProceso() {
+            alert("Proceso de ensamblaje iniciado");
+            // Aquí iría el código para enviar comandos al sistema
+        }
+
+        function detenerProceso() {
+            alert("Proceso detenido");
+            // Aquí iría el código para detener el ensamblaje
+        }
+
+        function actualizarSensores() {
+            // Simulación de datos, reemplazar con datos reales desde el backend
+            document.getElementById("ultrasonico").innerText = Math.random().toFixed(2) + " cm";
+            document.getElementById("color").innerText = ["Rojo", "Verde", "Azul"][Math.floor(Math.random() * 3)];
+            document.getElementById("temperatura").innerText = (20 + Math.random() * 10).toFixed(2) + " °C";
+            document.getElementById("presion").innerText = (1000 + Math.random() * 50).toFixed(2) + " hPa";
+            document.getElementById("humedad").innerText = (30 + Math.random() * 20).toFixed(2) + " %";
+        }
+
+        setInterval(actualizarSensores, 2000); // Actualiza cada 2 segundos
+    </script>
+</body>
+</html>
