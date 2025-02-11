@@ -72,6 +72,8 @@
       font-size: 1.2rem;
       font-weight: 500;
       margin-bottom: 15px;
+      /* Inicialmente en opacidad 0 para la animación */
+      opacity: 0;
     }
     /* Estilos para la tarjeta de sensores */
     .sensor-card {
@@ -85,6 +87,14 @@
     .sensor-data p {
       margin: 5px 0;
       font-size: 1rem;
+    }
+    /* Animación para el estado */
+    .fadeIn {
+      animation: fadeInAnimation 1s ease forwards;
+    }
+    @keyframes fadeInAnimation {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -146,7 +156,7 @@
     function runProcess(steps, index) {
       if (index < steps.length) {
         const currentStep = steps[index];
-        document.getElementById("status").textContent = "Estado: " + currentStep.text;
+        updateStatus("Estado: " + currentStep.text);
         document.getElementById("machine").style.background = "url('" + currentStep.image + "') no-repeat center";
         document.getElementById("machine").style.backgroundSize = "cover";
         // Espera 3 segundos antes de pasar al siguiente paso
@@ -154,9 +164,20 @@
           runProcess(steps, index + 1);
         }, 3000);
       } else {
-        document.getElementById("status").textContent = "Estado: Proceso completado.";
+        updateStatus("Estado: Proceso completado.");
         document.getElementById("startButton").disabled = false;
       }
+    }
+
+    // Función para actualizar el estado con animación
+    function updateStatus(message) {
+      const statusElem = document.getElementById("status");
+      // Actualiza el texto y reinicia la animación
+      statusElem.textContent = message;
+      statusElem.classList.remove("fadeIn");
+      // Forzamos el reflow para reiniciar la animación
+      void statusElem.offsetWidth;
+      statusElem.classList.add("fadeIn");
     }
 
     // Función que inicia el proceso
