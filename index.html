@@ -73,6 +73,19 @@
       font-weight: 500;
       margin-bottom: 15px;
     }
+    /* Estilos para la tarjeta de sensores */
+    .sensor-card {
+      text-align: left;
+      padding: 20px;
+    }
+    .sensor-card h3 {
+      margin-top: 0;
+      color: #5563DE;
+    }
+    .sensor-data p {
+      margin: 5px 0;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -82,13 +95,25 @@
       <h2 class="card-title">Control de Ensamblaje de Mesa</h2>
     </div>
     
-    <!-- Tarjeta de controles -->
+    <!-- Tarjeta del proceso -->
     <div class="card control-card">
       <div class="button-container">
         <button id="startButton" onclick="startProcess()">Iniciar Proceso</button>
       </div>
       <div class="machine" id="machine"></div>
       <p id="status">Estado: Esperando acción...</p>
+    </div>
+
+    <!-- Tarjeta de datos de sensores -->
+    <div class="card sensor-card">
+      <h3>Datos de Sensores</h3>
+      <div class="sensor-data">
+        <p><strong>Ultrasónico:</strong> <span id="sensor-ultrasonico">0 cm</span></p>
+        <p><strong>Color:</strong> <span id="sensor-color">Desconocido</span></p>
+        <p><strong>Calor:</strong> <span id="sensor-calor">0°C</span></p>
+        <p><strong>Presión:</strong> <span id="sensor-presion">0 kPa</span></p>
+        <p><strong>Humedad:</strong> <span id="sensor-humedad">0%</span></p>
+      </div>
     </div>
   </div>
 
@@ -117,7 +142,7 @@
       }
     ];
 
-    // Función recursiva para ejecutar cada paso con un retardo
+    // Función recursiva para ejecutar cada paso con retardo
     function runProcess(steps, index) {
       if (index < steps.length) {
         const currentStep = steps[index];
@@ -139,6 +164,18 @@
       document.getElementById("startButton").disabled = true;
       runProcess(processSteps, 0);
     }
+
+    // Función que simula la actualización de datos de los sensores
+    function updateSensors() {
+      document.getElementById("sensor-ultrasonico").textContent = (Math.random() * 100).toFixed(2) + " cm";
+      document.getElementById("sensor-color").textContent = ["Rojo", "Verde", "Azul"][Math.floor(Math.random() * 3)];
+      document.getElementById("sensor-calor").textContent = (Math.random() * 50).toFixed(2) + "°C";
+      document.getElementById("sensor-presion").textContent = (Math.random() * 100).toFixed(2) + " kPa";
+      document.getElementById("sensor-humedad").textContent = (Math.random() * 100).toFixed(2) + "%";
+    }
+
+    // Actualiza los datos de los sensores cada 2 segundos
+    setInterval(updateSensors, 2000);
   </script>
 </body>
 </html>
