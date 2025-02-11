@@ -57,16 +57,19 @@
             background: #e0e0e0;
             border-radius: 5px;
         }
+        .active {
+            background-color: #ff9800 !important;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Control de Ensamblaje de Mesa</h2>
-        <div class="machine"></div>
-        <button onclick="startStep(1)">1) Elevar parte superior</button>
-        <button onclick="startStep(2)">2) Transportar parte inferior</button>
-        <button onclick="startStep(3)">3) Activar dispensador de silicona</button>
-        <button onclick="startStep(4)">4) Bajar parte superior</button>
+        <div class="machine" id="machine"></div>
+        <button id="btn1" onclick="startStep(1)">1) Elevar parte superior</button>
+        <button id="btn2" onclick="startStep(2)">2) Transportar parte inferior</button>
+        <button id="btn3" onclick="startStep(3)">3) Activar dispensador de silicona</button>
+        <button id="btn4" onclick="startStep(4)">4) Bajar parte superior</button>
         <p id="status">Estado: Esperando acción...</p>
         <div class="sensor-data">
             <h3>Datos de Sensores</h3>
@@ -81,18 +84,29 @@
     <script>
         function startStep(step) {
             const status = document.getElementById("status");
+            const machine = document.getElementById("machine");
+            document.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+            
             switch(step) {
                 case 1:
                     status.textContent = "Estado: Elevando parte superior...";
+                    document.getElementById("btn1").classList.add("active");
+                    machine.style.background = "url('https://via.placeholder.com/600x200/ffcc00/000000?text=Elevando') no-repeat center";
                     break;
                 case 2:
                     status.textContent = "Estado: Transportando parte inferior...";
+                    document.getElementById("btn2").classList.add("active");
+                    machine.style.background = "url('https://via.placeholder.com/600x200/66ccff/000000?text=Transportando') no-repeat center";
                     break;
                 case 3:
                     status.textContent = "Estado: Activando dispensador de silicona...";
+                    document.getElementById("btn3").classList.add("active");
+                    machine.style.background = "url('https://via.placeholder.com/600x200/ff6666/000000?text=Dispensando') no-repeat center";
                     break;
                 case 4:
                     status.textContent = "Estado: Bajando parte superior...";
+                    document.getElementById("btn4").classList.add("active");
+                    machine.style.background = "url('https://via.placeholder.com/600x200/66ff66/000000?text=Bajando') no-repeat center";
                     break;
                 default:
                     status.textContent = "Estado: Esperando acción...";
