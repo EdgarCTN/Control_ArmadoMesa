@@ -23,6 +23,15 @@
     <section id="sensor-data">
       <h2>Datos de los Sensores</h2>
       <p id="sensorStatus">Datos de los sensores: Cargando...</p>
+      <!-- Menú para seleccionar sensor a visualizar -->
+      <label for="sensorSelect">Ver gráfico de: </label>
+      <select id="sensorSelect" onchange="updateSensorChart()">
+        <option value="sensor1">Sensor1</option>
+        <option value="sensor2">Sensor2</option>
+        <option value="sensor3">Sensor3</option>
+        <option value="sensor4">Sensor4</option>
+        <option value="sensor5">Sensor5</option>
+      </select>
       <!-- Gráfico reducido: width="300" y height="150" -->
       <canvas id="sensorChart" width="300" height="150"></canvas>
     </section>
@@ -30,4 +39,3 @@
   <script src="main.js"></script>
 </body>
 </html>
-
