@@ -4,139 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Control ESP32 - Grupo 4</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
-    h1, h2 { color: #333; }
-    button { padding: 15px 25px; font-size: 16px; margin: 10px; border: none; cursor: pointer; border-radius: 5px; }
-    .on { background-color: #28a745; color: white; }
-    .off { background-color: #dc3545; color: white; }
-    #status, #sensorStatus { margin-top: 20px; font-size: 18px; color: #555; }
-    canvas { margin-top: 20px; background: white; border-radius: 10px; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1>Control del ESP32 - Grupo 4</h1>
-  <p>Controla el LED del ESP32:</p>
-  <button class="on" onclick="controlLed('ON')">Encender LED</button>
-  <button class="off" onclick="controlLed('OFF')">Apagar LED</button>
-  <p id="status">Estado del LED: Desconocido</p>
-  
-  <h2>Historial de Cambios del LED</h2>
-  <canvas id="ledHistoryChart" width="400" height="200"></canvas>
-  
-  <h2>Datos del Sensor</h2>
-  <p id="sensorStatus">Datos del sensor: Cargando...</p>
-  <canvas id="sensorChart" width="400" height="200"></canvas>
-  
-  <script>
-    // URL de la API (ajusta la ruta según donde se encuentre alojado tu api.php)
-    const apiUrl = "https://07d4156a-7ffe-48fa-a08b-84fab5048dad-00-xr9pxzhzg06z.janeway.replit.dev/"; // Cambia esta URL por la correcta
+  <header>
+    <h1>Control del ESP32 - Grupo 4</h1>
+  </header>
+  <main>
+    <section id="control-led">
+      <h2>Control del LED</h2>
+      <p>Controla el LED del ESP32:</p>
+      <button class="btn on" onclick="controlLed('ON')">Encender LED</button>
+      <button class="btn off" onclick="controlLed('OFF')">Apagar LED</button>
+      <p id="status">Estado del LED: Desconocido</p>
+    </section>
 
-    // Función para controlar el LED mediante POST
-    function controlLed(status) {
-      fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: status })
-      })
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("status").innerText = "Estado del LED: " + status;
-        console.log("Respuesta:", data);
-        fetchLedHistory(); // Actualiza el gráfico del historial del LED
-      })
-      .catch(error => {
-        document.getElementById("status").innerText = "Error en la solicitud";
-        console.error("Error:", error);
-      });
-    }
+    <section id="led-history">
+      <h2>Historial de Cambios del LED</h2>
+      <canvas id="ledHistoryChart" width="400" height="200"></canvas>
+    </section>
 
-    // Función para obtener el historial de cambios del LED
-    function fetchLedHistory() {
-      fetch(apiUrl + "?history=true")
-        .then(response => response.json())
-        .then(data => {
-          const timestamps = data.map(entry => entry.timestamp);
-          const statuses = data.map(entry => entry.status === 'ON' ? 1 : 0);
-
-          const ctx = document.getElementById('ledHistoryChart').getContext('2d');
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: timestamps,
-              datasets: [{
-                label: 'Estado del LED (1=Encendido, 0=Apagado)',
-                data: statuses,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                fill: false,
-                tension: 0.1
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    stepSize: 1,
-                    callback: function(value) { return value === 1 ? 'ON' : 'OFF'; }
-                  }
-                }
-              }
-            }
-          });
-        })
-        .catch(error => console.error("Error al obtener el historial:", error));
-    }
-
-    // Función para obtener y mostrar datos de los sensores
-    function fetchSensorData() {
-      fetch(apiUrl + "?sensor=true")
-        .then(response => response.json())
-        .then(data => {
-          // Mostrar la última lectura en un párrafo
-          if (data.length > 0) {
-            const ultimaLectura = data[data.length - 1];
-            document.getElementById("sensorStatus").innerText = 
-              "Temperatura: " + ultimaLectura.temperatura + "°C, " +
-              "Humedad: " + ultimaLectura.humedad + "%, " +
-              "Timestamp: " + ultimaLectura.timestamp;
-          } else {
-            document.getElementById("sensorStatus").innerText = "No hay datos de sensor.";
-          }
-          // Actualizar gráfico de temperatura (por ejemplo)
-          const timestamps = data.map(entry => entry.timestamp);
-          const temperaturas = data.map(entry => entry.temperatura);
-          
-          const ctxSensor = document.getElementById('sensorChart').getContext('2d');
-          new Chart(ctxSensor, {
-            type: 'line',
-            data: {
-              labels: timestamps,
-              datasets: [{
-                label: 'Temperatura (°C)',
-                data: temperaturas,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                fill: false,
-                tension: 0.1
-              }]
-            },
-            options: {
-              scales: {
-                y: { beginAtZero: true }
-              }
-            }
-          });
-        })
-        .catch(error => console.error("Error al obtener datos del sensor:", error));
-    }
-
-    // Llamadas iniciales y actualización periódica
-    fetchLedHistory();
-    fetchSensorData();
-    setInterval(fetchSensorData, 5000); // Actualiza datos de sensor cada 5 segundos
-  </script>
+    <section id="sensor-data">
+      <h2>Datos del Sensor</h2>
+      <p id="sensorStatus">Datos del sensor: Cargando...</p>
+      <canvas id="sensorChart" width="400" height="200"></canvas>
+    </section>
+  </main>
+  <script src="main.js"></script>
 </body>
 </html>
