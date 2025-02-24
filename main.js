@@ -1,6 +1,30 @@
 // URL de la API (ajusta la ruta según donde se encuentre alojado tu api.php)
 const apiUrl = "https://07d4156a-7ffe-48fa-a08b-84fab5048dad-00-xr9pxzhzg06z.janeway.replit.dev/";
 
+// Configuración de títulos y parámetros para cada sensor
+const sensorTitles = {
+  sensor1: {
+    title: "Sensor de temperatura del modelo de armado de mesa",
+    parameter: "Temperatura (°C)"
+  },
+  sensor2: {
+    title: "Sensor de humedad del modelo de armado de mesa",
+    parameter: "Humedad (%)"
+  },
+  sensor3: {
+    title: "Sensor de presión del modelo de armado de mesa",
+    parameter: "Presión (Pa)"
+  },
+  sensor4: {
+    title: "Sensor de vibración del modelo de armado de mesa",
+    parameter: "Vibración (m/s²)"
+  },
+  sensor5: {
+    title: "Sensor de corriente del modelo de armado de mesa",
+    parameter: "Corriente (A)"
+  }
+};
+
 let currentChartMode = 'single'; // 'single' o 'all'
 let sensorChart;                // Instancia del gráfico en modo único
 let sensorCharts = {};          // Instancias de gráficos en modo "todos"
@@ -41,6 +65,7 @@ function updateSensorCard(ultimaLectura) {
 function updateSensorChart() {
   const sensorSelect = document.getElementById("sensorSelect");
   const sensorKey = sensorSelect.value; // "sensor1", "sensor2", etc.
+  const config = sensorTitles[sensorKey];
   
   const timestamps = sensorDataHistory.map(entry => entry.timestamp);
   const sensorValues = sensorDataHistory.map(entry => entry[sensorKey]);
@@ -48,7 +73,11 @@ function updateSensorChart() {
   if (sensorChart) {
     sensorChart.data.labels = timestamps;
     sensorChart.data.datasets[0].data = sensorValues;
-    sensorChart.data.datasets[0].label = sensorKey;
+    sensorChart.data.datasets[0].label = config.parameter;
+    // Actualiza título y subtítulo
+    sensorChart.options.plugins.title.text = config.title;
+    sensorChart.options.plugins.subtitle.text = config.parameter;
+    sensorChart.options.scales.y.title.text = config.parameter;
     sensorChart.update();
   } else {
     const ctx = document.getElementById('sensorChart').getContext('2d');
@@ -57,7 +86,7 @@ function updateSensorChart() {
       data: {
         labels: timestamps,
         datasets: [{
-          label: sensorKey,
+          label: config.parameter,
           data: sensorValues,
           borderColor: 'rgba(54, 162, 235, 1)',
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -66,8 +95,24 @@ function updateSensorChart() {
         }]
       },
       options: {
+        plugins: {
+          title: {
+            display: true,
+            text: config.title
+          },
+          subtitle: {
+            display: true,
+            text: config.parameter
+          }
+        },
         scales: {
-          y: { beginAtZero: true }
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: config.parameter
+            }
+          }
         }
       }
     });
@@ -80,16 +125,19 @@ function updateAllSensorCharts() {
   const timestamps = sensorDataHistory.map(entry => entry.timestamp);
   
   sensorKeys.forEach(sensorKey => {
+    const config = sensorTitles[sensorKey];
     const sensorValues = sensorDataHistory.map(entry => entry[sensorKey]);
     const canvasId = "sensorChart_" + sensorKey;
     
-    // Si ya existe el gráfico, actualiza sus datos
     if (sensorCharts[sensorKey]) {
       sensorCharts[sensorKey].data.labels = timestamps;
       sensorCharts[sensorKey].data.datasets[0].data = sensorValues;
+      sensorCharts[sensorKey].data.datasets[0].label = config.parameter;
+      sensorCharts[sensorKey].options.plugins.title.text = config.title;
+      sensorCharts[sensorKey].options.plugins.subtitle.text = config.parameter;
+      sensorCharts[sensorKey].options.scales.y.title.text = config.parameter;
       sensorCharts[sensorKey].update();
     } else {
-      // Crear un nuevo canvas para este sensor si no existe
       const canvas = document.createElement("canvas");
       canvas.id = canvasId;
       canvas.width = 300;
@@ -101,7 +149,7 @@ function updateAllSensorCharts() {
         data: {
           labels: timestamps,
           datasets: [{
-            label: sensorKey,
+            label: config.parameter,
             data: sensorValues,
             borderColor: getSensorColor(sensorKey),
             backgroundColor: getSensorColor(sensorKey, 0.2),
@@ -110,8 +158,24 @@ function updateAllSensorCharts() {
           }]
         },
         options: {
+          plugins: {
+            title: {
+              display: true,
+              text: config.title
+            },
+            subtitle: {
+              display: true,
+              text: config.parameter
+            }
+          },
           scales: {
-            y: { beginAtZero: true }
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: config.parameter
+              }
+            }
           }
         }
       });
