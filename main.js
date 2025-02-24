@@ -61,6 +61,22 @@ function updateSensorCard(ultimaLectura) {
   document.getElementById("sensorStatus").innerHTML = sensorHTML;
 }
 
+// Opción responsive para el gráfico: se activa responsive y se desactiva el mantenimiento del aspect ratio.
+const chartResponsiveOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: { display: true },
+    subtitle: { display: true }
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      title: { display: true }
+    }
+  }
+};
+
 // Actualizar gráfico en modo único (según el sensor seleccionado)
 function updateSensorChart() {
   const sensorSelect = document.getElementById("sensorSelect");
@@ -74,7 +90,6 @@ function updateSensorChart() {
     sensorChart.data.labels = timestamps;
     sensorChart.data.datasets[0].data = sensorValues;
     sensorChart.data.datasets[0].label = config.parameter;
-    // Actualiza título y subtítulo
     sensorChart.options.plugins.title.text = config.title;
     sensorChart.options.plugins.subtitle.text = config.parameter;
     sensorChart.options.scales.y.title.text = config.parameter;
@@ -95,23 +110,16 @@ function updateSensorChart() {
         }]
       },
       options: {
+        ...chartResponsiveOptions,
         plugins: {
-          title: {
-            display: true,
-            text: config.title
-          },
-          subtitle: {
-            display: true,
-            text: config.parameter
-          }
+          ...chartResponsiveOptions.plugins,
+          title: { display: true, text: config.title },
+          subtitle: { display: true, text: config.parameter }
         },
         scales: {
           y: {
             beginAtZero: true,
-            title: {
-              display: true,
-              text: config.parameter
-            }
+            title: { display: true, text: config.parameter }
           }
         }
       }
@@ -140,8 +148,10 @@ function updateAllSensorCharts() {
     } else {
       const canvas = document.createElement("canvas");
       canvas.id = canvasId;
-      canvas.width = 300;
-      canvas.height = 150;
+      // Para adaptarse a móviles, es mejor no fijar un ancho/alto absoluto en el atributo,
+      // sino controlar el tamaño desde CSS (o usar "responsive" en Chart.js).
+      canvas.style.width = "100%";
+      canvas.style.height = "200px"; // Altura fija, se adapta al ancho.
       document.getElementById("chartContainer").appendChild(canvas);
       const ctx = canvas.getContext('2d');
       sensorCharts[sensorKey] = new Chart(ctx, {
@@ -158,23 +168,16 @@ function updateAllSensorCharts() {
           }]
         },
         options: {
+          ...chartResponsiveOptions,
           plugins: {
-            title: {
-              display: true,
-              text: config.title
-            },
-            subtitle: {
-              display: true,
-              text: config.parameter
-            }
+            ...chartResponsiveOptions.plugins,
+            title: { display: true, text: config.title },
+            subtitle: { display: true, text: config.parameter }
           },
           scales: {
             y: {
               beginAtZero: true,
-              title: {
-                display: true,
-                text: config.parameter
-              }
+              title: { display: true, text: config.parameter }
             }
           }
         }
@@ -212,11 +215,11 @@ function toggleChartMode() {
   } else {
     currentChartMode = 'single';
     toggleBtn.textContent = "Ver todos los gráficos";
-    chartContainer.innerHTML = '<canvas id="sensorChart" width="300" height="150"></canvas>';
+    chartContainer.innerHTML = '<canvas id="sensorChart"></canvas>';
     sensorChart = null;
     sensorCharts = {};
     updateSensorChart();
-    singleControls.style.display = "inline-block";
+    singleControls.style.display = "flex";
   }
 }
 
