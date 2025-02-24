@@ -24,6 +24,19 @@ function controlLed(status) {
   });
 }
 
+// Actualiza el sensor card con datos formateados
+function updateSensorCard(ultimaLectura) {
+  const sensorHTML = `
+    <div class="sensor-row"><span class="sensor-label">Sensor1:</span> <span class="sensor-value">${ultimaLectura.sensor1}</span></div>
+    <div class="sensor-row"><span class="sensor-label">Sensor2:</span> <span class="sensor-value">${ultimaLectura.sensor2}</span></div>
+    <div class="sensor-row"><span class="sensor-label">Sensor3:</span> <span class="sensor-value">${ultimaLectura.sensor3}</span></div>
+    <div class="sensor-row"><span class="sensor-label">Sensor4:</span> <span class="sensor-value">${ultimaLectura.sensor4}</span></div>
+    <div class="sensor-row"><span class="sensor-label">Sensor5:</span> <span class="sensor-value">${ultimaLectura.sensor5}</span></div>
+    <div class="sensor-timestamp"><em>Última actualización: ${ultimaLectura.timestamp}</em></div>
+  `;
+  document.getElementById("sensorStatus").innerHTML = sensorHTML;
+}
+
 // Actualizar gráfico en modo único (según el sensor seleccionado)
 function updateSensorChart() {
   const sensorSelect = document.getElementById("sensorSelect");
@@ -70,7 +83,7 @@ function updateAllSensorCharts() {
     const sensorValues = sensorDataHistory.map(entry => entry[sensorKey]);
     const canvasId = "sensorChart_" + sensorKey;
     
-    // Si ya existe el gráfico, actualizar sus datos
+    // Si ya existe el gráfico, actualiza sus datos
     if (sensorCharts[sensorKey]) {
       sensorCharts[sensorKey].data.labels = timestamps;
       sensorCharts[sensorKey].data.datasets[0].data = sensorValues;
@@ -118,38 +131,32 @@ function getSensorColor(sensorKey, alpha = 1) {
   return colors[sensorKey] || `rgba(100, 100, 100, ${alpha})`;
 }
 
-// Función para alternar entre modo "único" y "todos"
+// Alternar entre modo "único" y "todos"
 function toggleChartMode() {
   const toggleBtn = document.getElementById("toggleChartMode");
   const chartContainer = document.getElementById("chartContainer");
   const singleControls = document.getElementById("singleControls");
   
   if (currentChartMode === 'single') {
-    // Cambiar a modo "todos"
     currentChartMode = 'all';
     toggleBtn.textContent = "Ver gráfico seleccionado";
-    // Limpiar container y crear contenedor para gráficos de todos los sensores
     chartContainer.innerHTML = "";
-    sensorChart = null; // Descartar el gráfico único
-    sensorCharts = {};  // Reiniciar gráficos múltiples
+    sensorChart = null;
+    sensorCharts = {};
     updateAllSensorCharts();
-    // Ocultar controles de selección de sensor
     singleControls.style.display = "none";
   } else {
-    // Cambiar a modo "único"
     currentChartMode = 'single';
     toggleBtn.textContent = "Ver todos los gráficos";
-    // Limpiar container y crear un canvas único
     chartContainer.innerHTML = '<canvas id="sensorChart" width="300" height="150"></canvas>';
     sensorChart = null;
     sensorCharts = {};
     updateSensorChart();
-    // Mostrar controles de selección
     singleControls.style.display = "inline-block";
   }
 }
 
-// Función para obtener datos de sensores
+// Obtener datos de sensores
 function fetchSensorData() {
   fetch(apiUrl + "?sensor=true")
     .then(response => response.json())
@@ -157,16 +164,10 @@ function fetchSensorData() {
       sensorDataHistory = data;
       if (data.length > 0) {
         const ultimaLectura = data[data.length - 1];
-        document.getElementById("sensorStatus").innerText =
-          "Sensor1: " + ultimaLectura.sensor1 + ", " +
-          "Sensor2: " + ultimaLectura.sensor2 + ", " +
-          "Sensor3: " + ultimaLectura.sensor3 + ", " +
-          "Sensor4: " + ultimaLectura.sensor4 + ", " +
-          "Sensor5: " + ultimaLectura.sensor5 + " (Timestamp: " + ultimaLectura.timestamp + ")";
+        updateSensorCard(ultimaLectura);
       } else {
-        document.getElementById("sensorStatus").innerText = "No hay datos de sensor.";
+        document.getElementById("sensorStatus").innerHTML = "<p class='loading'>No hay datos de sensor.</p>";
       }
-      // Actualizar gráfico según el modo actual
       if (currentChartMode === 'single') {
         updateSensorChart();
       } else {
@@ -176,8 +177,8 @@ function fetchSensorData() {
     .catch(error => console.error("Error al obtener datos del sensor:", error));
 }
 
-// Inicializar llamadas cuando el documento se cargue
+// Inicializar cuando el documento se cargue
 document.addEventListener('DOMContentLoaded', () => {
   fetchSensorData();
-  setInterval(fetchSensorData, 5000); // Actualiza datos de sensor cada 5 segundos
+  setInterval(fetchSensorData, 5000); // Actualiza cada 5 segundos
 });
