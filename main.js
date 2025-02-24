@@ -12,7 +12,6 @@ function controlLed(status) {
   .then(data => {
     document.getElementById("status").innerText = "Estado del LED: " + status;
     console.log("Respuesta:", data);
-    fetchLedHistory(); // Actualiza el gráfico del historial del LED
   })
   .catch(error => {
     document.getElementById("status").innerText = "Error en la solicitud";
@@ -20,44 +19,7 @@ function controlLed(status) {
   });
 }
 
-// Función para obtener el historial de cambios del LED
-function fetchLedHistory() {
-  fetch(apiUrl + "?history=true")
-    .then(response => response.json())
-    .then(data => {
-      const timestamps = data.map(entry => entry.timestamp);
-      const statuses = data.map(entry => entry.status === 'ON' ? 1 : 0);
-
-      const ctx = document.getElementById('ledHistoryChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: timestamps,
-          datasets: [{
-            label: 'Estado del LED (1=Encendido, 0=Apagado)',
-            data: statuses,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: false,
-            tension: 0.1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                stepSize: 1,
-                callback: function(value) { return value === 1 ? 'ON' : 'OFF'; }
-              }
-            }
-          }
-        }
-      });
-    })
-    .catch(error => console.error("Error al obtener el historial:", error));
-}
-let sensorChart; // Variable global para la instancia del gráfico
+let sensorChart; // Variable global para la instancia del gráfico de sensores
 
 function fetchSensorData() {
   fetch(apiUrl + "?sensor=true")
@@ -66,37 +28,77 @@ function fetchSensorData() {
       if (data.length > 0) {
         const ultimaLectura = data[data.length - 1];
         document.getElementById("sensorStatus").innerText =
-          "Temperatura: " + ultimaLectura.temperatura + "°C, " +
-          "Humedad: " + ultimaLectura.humedad + "%, " +
-          "Timestamp: " + ultimaLectura.timestamp;
+          "Sensor1: " + ultimaLectura.sensor1 + ", " +
+          "Sensor2: " + ultimaLectura.sensor2 + ", " +
+          "Sensor3: " + ultimaLectura.sensor3 + ", " +
+          "Sensor4: " + ultimaLectura.sensor4 + ", " +
+          "Sensor5: " + ultimaLectura.sensor5 + " (Timestamp: " + ultimaLectura.timestamp + ")";
       } else {
         document.getElementById("sensorStatus").innerText = "No hay datos de sensor.";
       }
 
-      // Actualizar gráfico de temperatura
+      // Preparar datos para el gráfico con 5 líneas
       const timestamps = data.map(entry => entry.timestamp);
-      const temperaturas = data.map(entry => entry.temperatura);
-      
+      const sensor1Data = data.map(entry => entry.sensor1);
+      const sensor2Data = data.map(entry => entry.sensor2);
+      const sensor3Data = data.map(entry => entry.sensor3);
+      const sensor4Data = data.map(entry => entry.sensor4);
+      const sensor5Data = data.map(entry => entry.sensor5);
+
       const ctxSensor = document.getElementById('sensorChart').getContext('2d');
       
-      // Destruir gráfico existente si existe
+      // Destruir gráfico existente si existe para evitar conflictos
       if (sensorChart) {
         sensorChart.destroy();
       }
       
-      // Crear una nueva instancia del gráfico
+      // Crear la nueva instancia del gráfico con múltiples datasets
       sensorChart = new Chart(ctxSensor, {
         type: 'line',
         data: {
           labels: timestamps,
-          datasets: [{
-            label: 'Temperatura (°C)',
-            data: temperaturas,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            fill: false,
-            tension: 0.1
-          }]
+          datasets: [
+            {
+              label: 'Sensor1',
+              data: sensor1Data,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              fill: false,
+              tension: 0.1
+            },
+            {
+              label: 'Sensor2',
+              data: sensor2Data,
+              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              fill: false,
+              tension: 0.1
+            },
+            {
+              label: 'Sensor3',
+              data: sensor3Data,
+              borderColor: 'rgba(255, 206, 86, 1)',
+              backgroundColor: 'rgba(255, 206, 86, 0.2)',
+              fill: false,
+              tension: 0.1
+            },
+            {
+              label: 'Sensor4',
+              data: sensor4Data,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              fill: false,
+              tension: 0.1
+            },
+            {
+              label: 'Sensor5',
+              data: sensor5Data,
+              borderColor: 'rgba(153, 102, 255, 1)',
+              backgroundColor: 'rgba(153, 102, 255, 0.2)',
+              fill: false,
+              tension: 0.1
+            }
+          ]
         },
         options: {
           scales: {
@@ -108,10 +110,8 @@ function fetchSensorData() {
     .catch(error => console.error("Error al obtener datos del sensor:", error));
 }
 
-
 // Inicializar llamadas cuando el documento se cargue
 document.addEventListener('DOMContentLoaded', () => {
-  fetchLedHistory();
   fetchSensorData();
   setInterval(fetchSensorData, 5000); // Actualiza datos de sensor cada 5 segundos
 });
