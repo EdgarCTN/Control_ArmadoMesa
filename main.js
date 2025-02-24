@@ -30,6 +30,22 @@ let sensorChart;                // Instancia del gráfico en modo único
 let sensorCharts = {};          // Instancias de gráficos en modo "todos"
 let sensorDataHistory = [];     // Historial de datos de sensores
 
+// Opciones comunes para gráficos responsivos
+const chartResponsiveOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: { display: true },
+    subtitle: { display: true }
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      title: { display: true }
+    }
+  }
+};
+
 // Función para controlar el LED mediante POST
 function controlLed(status) {
   fetch(apiUrl, {
@@ -60,22 +76,6 @@ function updateSensorCard(ultimaLectura) {
   `;
   document.getElementById("sensorStatus").innerHTML = sensorHTML;
 }
-
-// Opción responsive para el gráfico: se activa responsive y se desactiva el mantenimiento del aspect ratio.
-const chartResponsiveOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    title: { display: true },
-    subtitle: { display: true }
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      title: { display: true }
-    }
-  }
-};
 
 // Actualizar gráfico en modo único (según el sensor seleccionado)
 function updateSensorChart() {
@@ -148,10 +148,7 @@ function updateAllSensorCharts() {
     } else {
       const canvas = document.createElement("canvas");
       canvas.id = canvasId;
-      // Para adaptarse a móviles, es mejor no fijar un ancho/alto absoluto en el atributo,
-      // sino controlar el tamaño desde CSS (o usar "responsive" en Chart.js).
-      canvas.style.width = "100%";
-      canvas.style.height = "200px"; // Altura fija, se adapta al ancho.
+      // No fijamos ancho/alto en atributos, el CSS se encargará de ello.
       document.getElementById("chartContainer").appendChild(canvas);
       const ctx = canvas.getContext('2d');
       sensorCharts[sensorKey] = new Chart(ctx, {
