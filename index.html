@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <title>Control ESP32 - Grupo 4</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,8 +15,10 @@
     <section id="control-led">
       <h2>Control del LED</h2>
       <p>Controla el LED del ESP32:</p>
-      <button class="btn on" onclick="controlLed('ON')">Encender LED</button>
-      <button class="btn off" onclick="controlLed('OFF')">Apagar LED</button>
+      <div class="btn-container">
+        <button class="btn on" onclick="controlLed('ON')">Encender LED</button>
+        <button class="btn off" onclick="controlLed('OFF')">Apagar LED</button>
+      </div>
       <p id="status">Estado del LED: Desconocido</p>
     </section>
 
@@ -26,8 +28,8 @@
         <!-- Se actualizará con HTML para ver de forma profesional cada sensor -->
         <p class="loading">Cargando datos...</p>
       </div>
-      <div id="chartControls">
-        <div id="singleControls">
+      <div id="chartControls" class="chart-controls">
+        <div id="singleControls" class="single-controls">
           <label for="sensorSelect">Ver gráfico de:</label>
           <select id="sensorSelect" onchange="updateSensorChart()">
             <option value="sensor1">Sensor1</option>
@@ -39,7 +41,7 @@
         </div>
         <button id="toggleChartMode" class="btn btn-toggle" onclick="toggleChartMode()">Ver todos los gráficos</button>
       </div>
-      <div id="chartContainer">
+      <div id="chartContainer" class="chart-container">
         <!-- En modo único se mostrará un canvas; en modo "todos" se crearán 5 canvases -->
         <canvas id="sensorChart" width="300" height="150"></canvas>
       </div>
@@ -48,3 +50,4 @@
   <script src="main.js"></script>
 </body>
 </html>
+
