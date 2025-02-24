@@ -46,6 +46,11 @@ p {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
 }
 
 .on {
@@ -58,9 +63,52 @@ p {
   color: #fff;
 }
 
-#status, #sensorStatus {
+.btn-toggle {
+  background-color: #007bff;
+  color: #fff;
+}
+
+#status {
   font-size: 18px;
   color: #555;
+}
+
+/* Estilos para el sensor card */
+.sensor-card {
+  text-align: left;
+  margin: 0 auto 20px auto;
+  max-width: 350px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.sensor-card .sensor-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sensor-card .sensor-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.sensor-card .sensor-value {
+  color: #007bff;
+}
+
+.sensor-card .sensor-timestamp {
+  font-size: 0.9em;
+  color: #777;
+  text-align: right;
+  margin-top: 10px;
+}
+
+.loading {
+  font-style: italic;
+  color: #777;
 }
 
 #chartControls {
