@@ -57,8 +57,8 @@ function fetchLedHistory() {
     })
     .catch(error => console.error("Error al obtener el historial:", error));
 }
+let sensorChart; // Variable global para la instancia del gráfico
 
-// Función para obtener y mostrar los datos de los sensores
 function fetchSensorData() {
   fetch(apiUrl + "?sensor=true")
     .then(response => response.json())
@@ -72,13 +72,20 @@ function fetchSensorData() {
       } else {
         document.getElementById("sensorStatus").innerText = "No hay datos de sensor.";
       }
-      
+
       // Actualizar gráfico de temperatura
       const timestamps = data.map(entry => entry.timestamp);
       const temperaturas = data.map(entry => entry.temperatura);
       
       const ctxSensor = document.getElementById('sensorChart').getContext('2d');
-      new Chart(ctxSensor, {
+      
+      // Destruir gráfico existente si existe
+      if (sensorChart) {
+        sensorChart.destroy();
+      }
+      
+      // Crear una nueva instancia del gráfico
+      sensorChart = new Chart(ctxSensor, {
         type: 'line',
         data: {
           labels: timestamps,
@@ -100,6 +107,7 @@ function fetchSensorData() {
     })
     .catch(error => console.error("Error al obtener datos del sensor:", error));
 }
+
 
 // Inicializar llamadas cuando el documento se cargue
 document.addEventListener('DOMContentLoaded', () => {
