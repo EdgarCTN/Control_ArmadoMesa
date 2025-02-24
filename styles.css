@@ -155,3 +155,57 @@ canvas {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* Estilos para dispositivos móviles */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  
+  header {
+    padding: 20px 10px;
+    margin-bottom: 20px;
+  }
+  
+  header h1 {
+    font-size: 1.5em;
+  }
+  
+  main {
+    padding: 0 10px;
+  }
+  
+  section {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.9em;
+    margin: 5px;
+  }
+  
+  #status {
+    font-size: 1em;
+  }
+  
+  .sensor-card {
+    max-width: 100%;
+    padding: 15px;
+  }
+  
+  #chartControls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  #chartContainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
