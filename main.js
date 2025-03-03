@@ -1,7 +1,7 @@
 // URL de la API (ajusta la ruta según donde se encuentre alojado tu api.php)
 const apiUrl = "https://07d4156a-7ffe-48fa-a08b-84fab5048dad-00-xr9pxzhzg06z.janeway.replit.dev/";
 
-// Configuración de títulos y parámetros para cada sensor
+// Configuración de títulos y parámetros para cada sensor (solo se usan sensor1, sensor2 y sensor3)
 const sensorTitles = {
   sensor1: {
     title: "Sensor de temperatura del modelo de armado de mesa",
@@ -14,14 +14,6 @@ const sensorTitles = {
   sensor3: {
     title: "Sensor de distancia (HC-SR04) del modelo de armado de mesa",
     parameter: "Distancia (cm)"
-  },
-  sensor4: {
-    title: "Sensor de vibración del modelo de armado de mesa",
-    parameter: "Vibración (m/s²)"
-  },
-  sensor5: {
-    title: "Sensor de corriente del modelo de armado de mesa",
-    parameter: "Corriente (A)"
   }
 };
 
@@ -64,14 +56,12 @@ function controlLed(status) {
   });
 }
 
-// Actualiza el sensor card con datos formateados
+// Actualiza el sensor card con datos formateados (solo se muestran sensores 1, 2 y 3)
 function updateSensorCard(ultimaLectura) {
   const sensorHTML = `
     <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor1.title}:</span> <span class="sensor-value">${ultimaLectura.sensor1}</span></div>
     <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor2.title}:</span> <span class="sensor-value">${ultimaLectura.sensor2}</span></div>
     <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor3.title}:</span> <span class="sensor-value">${ultimaLectura.sensor3}</span></div>
-    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor4.title}:</span> <span class="sensor-value">${ultimaLectura.sensor4}</span></div>
-    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor5.title}:</span> <span class="sensor-value">${ultimaLectura.sensor5}</span></div>
     <div class="sensor-timestamp"><em>Última actualización: ${ultimaLectura.timestamp}</em></div>
   `;
   document.getElementById("sensorStatus").innerHTML = sensorHTML;
@@ -80,7 +70,7 @@ function updateSensorCard(ultimaLectura) {
 // Actualizar gráfico en modo único (según el sensor seleccionado)
 function updateSensorChart() {
   const sensorSelect = document.getElementById("sensorSelect");
-  const sensorKey = sensorSelect.value; // "sensor1", "sensor2", etc.
+  const sensorKey = sensorSelect.value; // "sensor1", "sensor2" o "sensor3"
   const config = sensorTitles[sensorKey];
   
   const timestamps = sensorDataHistory.map(entry => entry.timestamp);
@@ -127,9 +117,9 @@ function updateSensorChart() {
   }
 }
 
-// Actualizar gráficos en modo "todos"
+// Actualizar gráficos en modo "todos" (solo se muestran gráficos para sensor1, sensor2 y sensor3)
 function updateAllSensorCharts() {
-  const sensorKeys = ['sensor1', 'sensor2', 'sensor3', 'sensor4', 'sensor5'];
+  const sensorKeys = ['sensor1', 'sensor2', 'sensor3'];
   const timestamps = sensorDataHistory.map(entry => entry.timestamp);
   
   sensorKeys.forEach(sensorKey => {
@@ -148,7 +138,7 @@ function updateAllSensorCharts() {
     } else {
       const canvas = document.createElement("canvas");
       canvas.id = canvasId;
-      // No fijamos ancho/alto en atributos, el CSS se encargará de ello.
+      // No se fija ancho/alto en atributos, el CSS se encarga de ello.
       document.getElementById("chartContainer").appendChild(canvas);
       const ctx = canvas.getContext('2d');
       sensorCharts[sensorKey] = new Chart(ctx, {
@@ -183,14 +173,12 @@ function updateAllSensorCharts() {
   });
 }
 
-// Función auxiliar para obtener colores según el sensor
+// Función auxiliar para obtener colores según el sensor (solo se definen para sensor1, sensor2 y sensor3)
 function getSensorColor(sensorKey, alpha = 1) {
   const colors = {
     sensor1: `rgba(255, 99, 132, ${alpha})`,
     sensor2: `rgba(54, 162, 235, ${alpha})`,
-    sensor3: `rgba(255, 206, 86, ${alpha})`,
-    sensor4: `rgba(75, 192, 192, ${alpha})`,
-    sensor5: `rgba(153, 102, 255, ${alpha})`
+    sensor3: `rgba(255, 206, 86, ${alpha})`
   };
   return colors[sensorKey] || `rgba(100, 100, 100, ${alpha})`;
 }
