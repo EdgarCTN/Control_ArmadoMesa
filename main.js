@@ -12,8 +12,8 @@ const sensorTitles = {
     parameter: "Humedad (%)"
   },
   sensor3: {
-    title: "Sensor de presión del modelo de armado de mesa",
-    parameter: "Presión (Pa)"
+    title: "Sensor de distancia (HC-SR04) del modelo de armado de mesa",
+    parameter: "Distancia (cm)"
   },
   sensor4: {
     title: "Sensor de vibración del modelo de armado de mesa",
@@ -67,11 +67,11 @@ function controlLed(status) {
 // Actualiza el sensor card con datos formateados
 function updateSensorCard(ultimaLectura) {
   const sensorHTML = `
-    <div class="sensor-row"><span class="sensor-label">Sensor1:</span> <span class="sensor-value">${ultimaLectura.sensor1}</span></div>
-    <div class="sensor-row"><span class="sensor-label">Sensor2:</span> <span class="sensor-value">${ultimaLectura.sensor2}</span></div>
-    <div class="sensor-row"><span class="sensor-label">Sensor3:</span> <span class="sensor-value">${ultimaLectura.sensor3}</span></div>
-    <div class="sensor-row"><span class="sensor-label">Sensor4:</span> <span class="sensor-value">${ultimaLectura.sensor4}</span></div>
-    <div class="sensor-row"><span class="sensor-label">Sensor5:</span> <span class="sensor-value">${ultimaLectura.sensor5}</span></div>
+    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor1.title}:</span> <span class="sensor-value">${ultimaLectura.sensor1}</span></div>
+    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor2.title}:</span> <span class="sensor-value">${ultimaLectura.sensor2}</span></div>
+    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor3.title}:</span> <span class="sensor-value">${ultimaLectura.sensor3}</span></div>
+    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor4.title}:</span> <span class="sensor-value">${ultimaLectura.sensor4}</span></div>
+    <div class="sensor-row"><span class="sensor-label">${sensorTitles.sensor5.title}:</span> <span class="sensor-value">${ultimaLectura.sensor5}</span></div>
     <div class="sensor-timestamp"><em>Última actualización: ${ultimaLectura.timestamp}</em></div>
   `;
   document.getElementById("sensorStatus").innerHTML = sensorHTML;
